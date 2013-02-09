@@ -1,0 +1,13 @@
+.*.swp
+
+CMakeFiles
+CMakeCache.txt
+Makefile
+cmake_install.cmake
+
+sandbox/
+src/stompeded
+lib/libstompede.so
+lib/libstompede.so.*
+
+include/stompede/sysconfig.h
