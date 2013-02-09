@@ -1,5 +1,6 @@
 #include <stompede/stomp/Broker.h>
 #include <stompede/stomp/Connection.h>
+#include <stompede/Domain.h>
 #include <stompede/sysconfig.h>
 #include <ev++.h>
 
@@ -180,10 +181,22 @@ err:
 	::close(cfd);
 }
 
+Domain* Broker::createDomain(const std::string& name)
+{
+	Domain* domain = new Domain();
+	domains_[name] = domain;
+	return domain;
+}
+
+void Broker::setDefaultDomain(Domain* domain)
+{
+	defaultDomain_ = domain;
+}
+
 bool Broker::start()
 {
-//	if (io_.fd < 0)
-//		return false;
+	if (io_.fd < 0)
+		return false;
 
 	io_.start();
 	return true;

@@ -27,6 +27,11 @@ void Connection::reset(int fd)
 	io_.start();
 }
 
+void Connection::receiveMessage(Message* message)
+{
+	//! \todo
+}
+
 // {{{ Network I/O
 void Connection::io(ev::io& io, int revents)
 {

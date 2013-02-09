@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stompede/Api.h>
+#include <stompede/Session.h>
 #include <stompede/stomp/Reader.h>
 #include <unordered_map>
 #include <string>
@@ -18,7 +19,8 @@ class Broker;
 /*! Represents a streaming connection from the remote endpoint to our broker instance.
  */
 class STOMPEDE_API Connection :
-	public Reader
+	public Reader,
+	public Session
 {
 public:
 	Connection(Broker* broker, int fd);
@@ -48,6 +50,9 @@ public:
 	void writeHeader(const std::string& name, const std::string& value);
 	void writeBody(const std::string& value);
 	void writeEnd();
+
+	// overrides
+	virtual void receiveMessage(Message* message);
 
 private:
 	// networking

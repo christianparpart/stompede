@@ -6,37 +6,13 @@
 #include <ev++.h>
 
 namespace stompede {
-	class Channel;
+	class Domain;
 }
 
 namespace stompede {
 namespace stomp {
 
 class Broker;
-
-/*! a domain (or namespace) of message queues.
- *
- * Think of a segmentation, and allow the client to connect to only one of them.
- * The idea behind comes from STOMP, which allows setting a "host"-header
- * in the CONNECT-frame.
- *
- * This "host" header's value is the name of a given domain.
- *
- * I could have named this API "Host", though, this is very unintuitive and
- * would lead to misinterpretations and confusions.
- */
-class STOMPEDE_API Domain
-{
-public:
-	Domain();
-	~Domain();
-
-	bool contains(const std::string& destination) const;
-	Channel* find(const std::string& destination);
-
-private:
-	std::unordered_map<std::string, Channel*> channels_;
-};
 
 /*! A worker thread serving broker connections.
  */
@@ -59,6 +35,11 @@ public:
 	bool setupWorkers(size_t count);
 	bool setupListener(const char* bind = "0.0.0.0", int port = 61613, int backlog = 128);
 
+	Domain* createDomain(const std::string& name);
+
+	void setDefaultDomain(Domain* domain);
+	Domain* defaultDomain() const { return defaultDomain_; }
+
 	bool start();
 	void stop();
 	void kill();
@@ -77,6 +58,8 @@ private:
 
 	//! map of registered domains
 	std::unordered_map<std::string, Domain*> domains_;
+
+	//! pointer to default domain or NULL if not provided.
 	Domain* defaultDomain_;
 
 	std::string address_;  //!< tcp listener address
